@@ -14,12 +14,24 @@ app.use(express.urlencoded({ extended: true }));
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+const db = require('./models');
+
 // Health check
 app.get('/api', (req, res) => {
     res.json({
         message: '🚧 Lapor Jalan Rusak API',
         status: 'running'
     });
+});
+
+// DB Connection Check
+app.get('/api/db-check', async (req, res) => {
+    try {
+        await db.sequelize.authenticate();
+        res.json({ message: '✅ Database Connection State: ESTABLISHED', config: process.env.DATABASE_URL ? 'Using Env Var' : 'Using Config' });
+    } catch (error) {
+        res.status(500).json({ message: '❌ Database Connection Error', error: error.message });
+    }
 });
 
 // API routes
