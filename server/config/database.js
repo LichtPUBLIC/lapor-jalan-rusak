@@ -5,12 +5,13 @@ module.exports = {
     },
     production: {
         use_env_variable: 'DATABASE_URL',
-        dialect: 'postgres',
+        dialect: 'mysql',
         dialectOptions: {
             ssl: {
                 require: true,
                 rejectUnauthorized: false
-            }
+            },
+            connectTimeout: 60000
         },
         pool: {
             max: 5,
