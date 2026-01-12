@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Mail, Lock, ArrowRight, AlertCircle } from "lucide-react";
 import { colors, glass, borderRadius, shadows, transitions, buttons, inputs } from "../designSystem";
+import config from "../config";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,7 +18,8 @@ function Login() {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+      // ... inside handleLogin
+      const res = await axios.post(`${config.apiUrl}/api/auth/login`, { email, password });
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);

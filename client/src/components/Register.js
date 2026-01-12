@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from "lucide-react";
 import { colors, glass, borderRadius, shadows, transitions, buttons, inputs } from "../designSystem";
+import config from "../config";
 
 function Register() {
   const [form, setForm] = useState({ nama: "", email: "", password: "" });
@@ -17,7 +18,8 @@ function Register() {
     setError("");
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", form);
+      // ... inside handleReg
+      await axios.post(`${config.apiUrl}/api/auth/register`, form);
       // Show success and redirect
       alert("✅ Registrasi Berhasil! Silakan login.");
       navigate("/login");

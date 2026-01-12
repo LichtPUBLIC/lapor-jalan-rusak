@@ -6,6 +6,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { MapPin, Calendar, User, AlertCircle, CheckCircle, Clock, Navigation } from 'lucide-react';
 import { colors, glass, borderRadius, shadows, transitions } from '../designSystem';
+import config from "../config";
 
 let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow, iconSize: [25, 41], iconAnchor: [12, 41] });
 L.Marker.prototype.options.icon = DefaultIcon;
@@ -37,7 +38,7 @@ function Dashboard() {
     const fetchReports = async () => {
       const token = localStorage.getItem('token');
       try {
-        const res = await axios.get('http://localhost:5000/api/reports', {
+        const res = await axios.get(`${config.apiUrl}/api/reports`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setReports(res.data.data);
@@ -292,7 +293,7 @@ function Dashboard() {
                   <Popup>
                     <div style={{ textAlign: 'center', minWidth: '150px' }}>
                       <img
-                        src={`http://localhost:5000/uploads/${lap.photo}`}
+                        src={lap.photo.startsWith('http') ? lap.photo : `${config.uploads}/${lap.photo}`}
                         alt="Bukti"
                         style={{ width: '100%', borderRadius: '8px', marginBottom: '8px' }}
                       />
@@ -338,7 +339,7 @@ function Dashboard() {
               >
                 <div style={cardImageContainerStyle}>
                   <img
-                    src={`http://localhost:5000/uploads/${lap.photo}`}
+                    src={lap.photo.startsWith('http') ? lap.photo : `${config.uploads}/${lap.photo}`}
                     alt={lap.title}
                     style={cardImageStyle}
                   />

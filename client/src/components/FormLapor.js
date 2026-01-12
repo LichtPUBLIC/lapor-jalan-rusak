@@ -7,6 +7,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { Camera, RotateCcw, FileText, MessageSquare, Send, MapPin, CheckCircle } from 'lucide-react';
 import { colors, glass, borderRadius, shadows, transitions, buttons, inputs } from '../designSystem';
+import config from "../config";
 
 let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow, iconSize: [25, 41], iconAnchor: [12, 41] });
 L.Marker.prototype.options.icon = DefaultIcon;
@@ -51,7 +52,7 @@ function FormLapor() {
       formData.append('photo', blob, 'jalan-rusak.jpg');
 
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/reports', formData, {
+      await axios.post(`${config.apiUrl}/api/reports`, formData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       });
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RefreshCw, MapPin, User, Calendar, Image, Trash2 } from "lucide-react";
 import { colors, glass, borderRadius, shadows, transitions, buttons } from "../designSystem";
+import config from "../config";
 
 function AdminReport() {
   const [reports, setReports] = useState([]);
@@ -11,7 +12,7 @@ function AdminReport() {
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get("http://localhost:5000/api/reports", {
+      const res = await axios.get(`${config.apiUrl}/api/reports`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReports(res.data.data);
@@ -33,7 +34,7 @@ function AdminReport() {
 
     try {
       const response = await axios.patch(
-        `http://localhost:5000/api/reports/${reportId}/status`,
+        `${config.apiUrl}/api/reports/${reportId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -65,7 +66,7 @@ function AdminReport() {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/reports/${reportId}`,
+        `${config.apiUrl}/api/reports/${reportId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -313,12 +314,12 @@ function AdminReport() {
                 <tr key={lap.id}>
                   <td style={tdFirstStyle}>
                     <a
-                      href={`http://localhost:5000/uploads/${lap.photo}`}
+                      href={lap.photo.startsWith('http') ? lap.photo : `${config.uploads}/${lap.photo}`}
                       target="_blank"
                       rel="noreferrer"
                     >
                       <img
-                        src={`http://localhost:5000/uploads/${lap.photo}`}
+                        src={lap.photo.startsWith('http') ? lap.photo : `${config.uploads}/${lap.photo}`}
                         alt="Bukti"
                         style={imageStyle}
                       />

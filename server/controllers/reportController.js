@@ -3,7 +3,11 @@ const { Report, User } = require('../models');
 exports.createReport = async (req, res) => {
   try {
     const { title, description, latitude, longitude } = req.body;
-    const photo = req.file ? req.file.filename : null;
+    let photo = null;
+    if (req.file) {
+      // If using Cloudinary (starts with http), use full path. Otherwise local filename.
+      photo = req.file.path.startsWith('http') ? req.file.path : req.file.filename;
+    }
 
     if (!photo || !latitude) return res.status(400).json({ message: "Foto dan Lokasi wajib ada!" });
 
