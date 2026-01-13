@@ -23,7 +23,8 @@ module.exports = {
                     require: true,
                     rejectUnauthorized: false
                 }
-            }
+            },
+            dialectModule: require('mysql2'),
         } : {
             dialect: 'sqlite',
             storage: './database.sqlite'
