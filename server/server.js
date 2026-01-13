@@ -45,7 +45,7 @@ app.get('/api/setup-db', async (req, res) => {
     }
 });
 
-});
+
 
 // Promote User to Admin (Run once)
 app.get('/api/promote-admin', async (req, res) => {
