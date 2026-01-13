@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import { Camera, RotateCcw, FileText, MessageSquare, Send, MapPin, CheckCircle } from 'lucide-react';
+import { Camera, RotateCcw, FileText, MessageSquare, Send, MapPin, CheckCircle, SwitchCamera } from 'lucide-react';
 import { colors, glass, borderRadius, shadows, transitions, buttons, inputs } from '../designSystem';
 import config from "../config";
 
@@ -20,6 +20,7 @@ function FormLapor() {
   const [message, setMessage] = useState("");
   const [focusedField, setFocusedField] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [facingMode, setFacingMode] = useState("environment");
   const webcamRef = useRef(null);
 
   useEffect(() => {
@@ -40,6 +41,10 @@ function FormLapor() {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
   }, [webcamRef]);
+
+  const toggleCamera = useCallback(() => {
+    setFacingMode(prev => prev === "user" ? "environment" : "user");
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,6 +149,7 @@ function FormLapor() {
     gap: '12px',
     marginTop: '20px',
     justifyContent: 'center',
+    flexWrap: 'wrap',
   };
 
   const captureButtonStyle = {
@@ -160,6 +166,14 @@ function FormLapor() {
     alignItems: 'center',
     gap: '8px',
     padding: '14px 32px',
+  };
+
+  const switchButtonStyle = {
+    ...buttons.secondary,
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '14px 24px',
   };
 
   const mapTitleStyle = {
@@ -319,6 +333,7 @@ function FormLapor() {
                     screenshotFormat="image/jpeg"
                     width="100%"
                     height="100%"
+                    videoConstraints={{ facingMode: facingMode }}
                     style={{ objectFit: 'cover' }}
                   />
                   <div style={scannerOverlayStyle}>
@@ -338,10 +353,16 @@ function FormLapor() {
                   Foto Ulang
                 </button>
               ) : (
-                <button onClick={capture} style={captureButtonStyle}>
-                  <Camera size={20} />
-                  Ambil Foto
-                </button>
+                <>
+                  <button onClick={toggleCamera} style={switchButtonStyle} title="Ganti Kamera">
+                    <SwitchCamera size={20} />
+                    Ganti Kamera
+                  </button>
+                  <button onClick={capture} style={captureButtonStyle}>
+                    <Camera size={20} />
+                    Ambil Foto
+                  </button>
+                </>
               )}
             </div>
           </div>
