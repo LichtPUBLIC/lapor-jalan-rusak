@@ -24,11 +24,15 @@ function FormLapor() {
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        (err) => alert("Gagal ambil lokasi: " + err.message),
-        { enableHighAccuracy: true }
+      const watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        },
+        (err) => console.error("Gagal ambil lokasi:", err),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
       );
+
+      return () => navigator.geolocation.clearWatch(watchId);
     }
   }, []);
 
