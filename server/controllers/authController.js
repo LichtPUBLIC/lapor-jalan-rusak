@@ -6,6 +6,7 @@ const { SECRET_KEY } = require('../middleware/auth');
 exports.register = async (req, res) => {
   try {
     const { nama, email, password } = req.body;
+    if (password.length < 6) return res.status(400).json({ message: "Password minimal 6 karakter!" });
     const hashedPassword = await bcrypt.hash(password, 10);
     await User.create({ nama, email, password: hashedPassword });
     res.json({ message: "Registrasi berhasil!" });
