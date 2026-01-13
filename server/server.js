@@ -34,6 +34,17 @@ app.get('/api/db-check', async (req, res) => {
     }
 });
 
+// Initialize Database Tables (Run once)
+app.get('/api/setup-db', async (req, res) => {
+    try {
+        await db.sequelize.authenticate();
+        await db.sequelize.sync({ alter: true }); // Create or update tables
+        res.json({ message: '✅ Database Synchronized Successfully!' });
+    } catch (error) {
+        res.status(500).json({ message: '❌ DB Sync Failed', error: error.message });
+    }
+});
+
 // API routes
 app.use('/api', apiRoutes);
 
