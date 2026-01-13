@@ -45,6 +45,26 @@ app.get('/api/setup-db', async (req, res) => {
     }
 });
 
+});
+
+// Promote User to Admin (Run once)
+app.get('/api/promote-admin', async (req, res) => {
+    try {
+        const { email } = req.query;
+        if (!email) return res.status(400).json({ message: "Email parameter required!" });
+
+        const user = await db.User.findOne({ where: { email } });
+        if (!user) return res.status(404).json({ message: "User not found! Please register first." });
+
+        user.role = 'admin';
+        await user.save();
+
+        res.json({ message: `✅ User ${email} is now an ADMIN!` });
+    } catch (error) {
+        res.status(500).json({ message: '❌ Promotion Failed', error: error.message });
+    }
+});
+
 // API routes
 app.use('/api', apiRoutes);
 
